@@ -1,0 +1,77 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: datalux-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-datalux}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-datalux_contacts}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"  # Bind to localhost on different port to avoid conflict
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-datalux}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - datalux-network
+
+  fastapi-backend:
+    build: ./backend
+    container_name: datalux-backend
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-datalux}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-datalux_contacts}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      NOTIFICATION_EMAIL: ${NOTIFICATION_EMAIL}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+    ports:
+      - "127.0.0.1:8003:8000"  # Bind to localhost only on port 8003
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - datalux-network
+
+  datalux-website:
+    image: nginx:alpine
+    container_name: datalux-website
+    ports:
+      - "127.0.0.1:8002:80"  # Bind to localhost only on port 8002
+    volumes:
+      - ./html:/usr/share/nginx/html:ro  # Read-only mount
+      - ./nginx:/etc/nginx/conf.d:ro     # Read-only nginx config
+    depends_on:
+      - fastapi-backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - datalux-network
+
+volumes:
+  postgres_data:
+
+networks:
+  datalux-network:
+    name: datalux-network
+    driver: bridge

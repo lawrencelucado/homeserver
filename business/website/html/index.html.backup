@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DataLux Consulting - Cloud Infrastructure, Data Engineering, and Business Intelligence services in Houston, Texas. Illuminating your data infrastructure with expert DevOps and analytics solutions.">
+    <meta name="keywords" content="cloud consulting, data engineering, DevOps, business intelligence, Houston, AWS, Azure, data pipelines, analytics">
+    <title>DataLux Consulting | Illuminating Your Data Infrastructure</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --deep-space: #0D1B2A;
+            --neon-teal: #00F5D4;
+            --white: #FFFFFF;
+            --gray-light: #F8F9FA;
+            --gray-medium: #6C757D;
+            --accent-gold: #FFD700;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--deep-space);
+            background: var(--white);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.75rem; margin-bottom: 0.75rem; }
+        h4 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--deep-space);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--neon-teal);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--deep-space);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--neon-teal);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            background: linear-gradient(135deg, var(--deep-space) 0%, #1a2f45 100%);
+            color: var(--white);
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--neon-teal);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--neon-teal);
+            color: var(--deep-space);
+        }
+
+        .btn-primary:hover {
+            background: #00d4bd;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 245, 212, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--deep-space);
+        }
+
+        .hero .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        /* Core Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--neon-teal);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            color: var(--deep-space);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-focus {
+            color: var(--neon-teal);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Deliverables Section */
+        .deliverables {
+            background: var(--gray-light);
+        }
+
+        .deliverables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .deliverable-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--neon-teal);
+        }
+
+        .deliverable-item h4 {
+            color: var(--deep-space);
+        }
+
+        .deliverable-item p {
+            color: var(--gray-medium);
+            font-size: 0.95rem;
+        }
+
+        /* Service Tiers */
+        .tiers {
+            background: var(--deep-space);
+            color: var(--white);
+        }
+
+        .tiers h2 {
+            color: var(--white);
+            text-align: center;
+        }
+
+        .tiers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tier-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 10px;
+            border: 2px solid rgba(0, 245, 212, 0.3);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .tier-card:hover {
+            border-color: var(--neon-teal);
+            background: rgba(255,255,255,0.08);
+            transform: scale(1.02);
+        }
+
+        .tier-name {
+            font-size: 1.75rem;
+            color: var(--neon-teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-ideal {
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .tier-card p {
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--white);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .about-text h3 {
+            color: var(--neon-teal);
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            color: var(--gray-medium);
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--gray-light);
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--neon-teal);
+        }
+
+        .stat-label {
+            color: var(--gray-medium);
+            margin-top: 0.5rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--gray-light);
+        }
+
+        .contact h2 {
+            text-align: center;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 3rem auto 0;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--deep-space);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--neon-teal);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gray-light);
+        }
+
+        .contact-info p {
+            margin: 0.5rem 0;
+            color: var(--gray-medium);
+        }
+
+        .contact-info a {
+            color: var(--neon-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--deep-space);
+            color: var(--white);
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        footer a {
+            color: var(--neon-teal);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+
+            nav ul {
+                display: none;
+            }
+
+            .hero {
+                padding: 4rem 0;
+            }
+
+            .hero .btn-group {
+                flex-direction: column;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .services-grid,
+            .deliverables-grid,
+            .tiers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">Data<span>Lux</span></a>
+            <ul>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#tiers">Packages</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Illuminating Your Data Infrastructure</h1>
+            <p class="tagline">Cloud • On-Prem • Data • Intelligence</p>
+            <p>Expert cloud, on-premises, and hybrid infrastructure solutions. From data engineering to business intelligence—we help companies scale with confidence, wherever your systems live.</p>
+            <div class="btn-group">
+                <a href="#contact" class="btn btn-primary">Get Started</a>
+                <a href="#services" class="btn btn-secondary">Our Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Core Consulting Services</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; color: var(--gray-medium);">
+                From cloud infrastructure to on-premises systems and AI-ready architectures, we deliver end-to-end solutions that transform your data operations—wherever they run.
+            </p>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">☁️</div>
+                    <span class="service-focus">Building Scalable Systems</span>
+                    <h3>Cloud Infrastructure & DevOps</h3>
+                    <p>Designing, deploying, and managing secure, efficient infrastructure across AWS, Azure, GCP, on-premises data centers, and hybrid environments with modern automation and GitOps practices.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">⚙️</div>
+                    <span class="service-focus">Data Pipelines & Integration</span>
+                    <h3>Data Engineering & Automation</h3>
+                    <p>Ingesting, transforming, and automating data flows using Airflow, dbt, Prefect, or custom Python stacks that scale with your business.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <span class="service-focus">Insight Delivery</span>
+                    <h3>Business Intelligence & Analytics</h3>
+                    <p>Interactive dashboards, KPIs, and visualizations in tools like Superset, Power BI, or Metabase that drive data-informed decisions.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🧠</div>
+                    <span class="service-focus">Foundation for ML/AI</span>
+                    <h3>AI-Ready Architecture</h3>
+                    <p>Modern data lakes, MLOps pipelines, and data quality frameworks that prepare your infrastructure for AI and machine learning initiatives.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🔒</div>
+                    <span class="service-focus">Operational Resilience</span>
+                    <h3>Security & Compliance</h3>
+                    <p>Hardening infrastructure, IAM management, and SOC/audit readiness for cloud environments with enterprise-grade security practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specific Deliverables -->
+    <section id="deliverables" class="deliverables">
+        <div class="container">
+            <h2>What We Deliver</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem; color: var(--gray-medium);">
+                Concrete, production-ready solutions you can deploy immediately
+            </p>
+
+            <div class="deliverables-grid">
+                <div class="deliverable-item">
+                    <h4>Infrastructure as Code</h4>
+                    <p>Terraform blueprints, reusable modules, GitOps pipelines</p>
+                </div>
+
+                <div class="deliverable-item">
+                    <h4>Cloud Deployment & Automation</h4>
+                    <p>CI/CD setup, Docker + Kubernetes containerization</p>
+                </div>
+
+                <div class="deliverable-item">
+                    <h4>Data Pipeline Development</h4>
+                    <p>ETL design, Airflow/Prefect orchestration, validation scripts</p>
+                </div>
+
+                <div class="deliverable-item">
+                    <h4>Analytics Dashboards</h4>
+                    <p>Interactive KPIs, SQL models, API-connected visualizations</p>
+                </div>
+
+                <div class="deliverable-item">
+                    <h4>Observability Setup</h4>
+                    <p>Prometheus, Grafana, log aggregation for proactive monitoring</p>
+                </div>
+
+                <div class="deliverable-item">
+                    <h4>Data Quality Frameworks</h4>
+                    <p>Rule-based validation (Great Expectations), anomaly alerts</p>
+                </div>
+
+                <div class="deliverable-item">
+                    <h4>AI & Predictive Readiness</h4>
+                    <p>Data preprocessing, feature stores, integration pipelines</p>
+                </div>
+
+                <div class="deliverable-item">
+                    <h4>IT Systems Optimization</h4>
+                    <p>Cloud cost audits, automation scripts, system refactoring</p>
+                </div>
+
+                <div class="deliverable-item">
+                    <h4>Consulting & Training</h4>
+                    <p>Workshops on DevOps, data architecture, analytics best practices</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Tiers -->
+    <section id="tiers" class="tiers">
+        <div class="container">
+            <h2>Pre-Packaged Service Tiers</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto; opacity: 0.9;">
+                Choose the package that matches your current stage and scale as you grow
+            </p>
+
+            <div class="tiers-grid">
+                <div class="tier-card">
+                    <div class="tier-name">Starter: Foundation Build</div>
+                    <span class="tier-ideal">Ideal for: Small businesses, first-time cloud adopters</span>
+                    <p>Deploys a secure, automated cloud, on-premises, or hybrid foundation. Get your infrastructure right from day one with modern DataOps and DevOps practices and scalable architecture.</p>
+                </div>
+
+                <div class="tier-card">
+                    <div class="tier-name">Growth: DataOps Integration</div>
+                    <span class="tier-ideal">Ideal for: Mid-stage teams scaling data operations</span>
+                    <p>Adds data pipelines, dashboards, and workflow automation. Transform raw data into actionable insights with reliable, automated data operations.</p>
+                </div>
+
+                <div class="tier-card">
+                    <div class="tier-name">Enterprise: Intelligence Suite</div>
+                    <span class="tier-ideal">Ideal for: Mature companies needing insight at scale</span>
+                    <p>Full observability, analytics, AI readiness, and compliance. Enterprise-grade data infrastructure with security, governance, and machine learning capabilities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About DataLux Consulting</h2>
+
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Expert Cloud & Data Engineering</h3>
+                    <p>DataLux Consulting, founded by Lawrence A.O.T. Lucas, brings deep expertise in cloud infrastructure, data engineering, and DevOps automation to growing businesses in Houston and beyond.</p>
+
+                    <p>With hands-on experience across AWS, Azure, GCP, and modern data tools like Airflow, dbt, and Terraform, we help companies build reliable, scalable systems that turn data into competitive advantage.</p>
+
+                    <p>We're not just consultants—we're partners in your digital transformation, committed to delivering production-ready solutions that work from day one.</p>
+                </div>
+
+                <div class="about-stats">
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Client Satisfaction</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">Houston</div>
+                        <div class="stat-label">Based in TX</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">Cloud</div>
+                        <div class="stat-label">First Approach</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">Modern</div>
+                        <div class="stat-label">Tech Stack</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Let's Build Something Great</h2>
+
+            <div class="contact-content">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service">Interested In</label>
+                        <select id="service" name="service">
+                            <option value="">Select a service...</option>
+                            <option value="Cloud Infrastructure & DevOps">Cloud Infrastructure & DevOps</option>
+                            <option value="Data Engineering & Automation">Data Engineering & Automation</option>
+                            <option value="Business Intelligence & Analytics">Business Intelligence & Analytics</option>
+                            <option value="AI-Ready Architecture">AI-Ready Architecture</option>
+                            <option value="Security & Compliance">Security & Compliance</option>
+                            <option value="Other / Not Sure">Other / Not Sure</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Tell us about your project *</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="submit-btn">Send Message</button>
+                    <div id="form-message" style="margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none;"></div>
+                </form>
+
+                <div class="contact-info">
+                    <p><strong>Email:</strong> <a href="mailto:lawrence@datalux.dev">lawrence@datalux.dev</a></p>
+                    <p><strong>Location:</strong> Houston, Texas</p>
+                    <p><strong>Response Time:</strong> Within 24 hours</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 DataLux Consulting. A division of Cutens LLC.</p>
+            <p style="margin-top: 1rem;">
+                <a href="https://linkedin.com/company/datalux-consulting">LinkedIn</a> •
+                <a href="https://github.com/datalux-consulting">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Handle contact form submission
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submit-btn');
+            const formMessage = document.getElementById('form-message');
+            const form = e.target;
+
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            formMessage.style.display = 'none';
+
+            // Collect form data
+            const formData = {
+                name: form.name.value,
+                email: form.email.value,
+                company: form.company.value || null,
+                service: form.service.value || null,
+                message: form.message.value
+            };
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    // Success
+                    formMessage.style.display = 'block';
+                    formMessage.style.backgroundColor = '#d4edda';
+                    formMessage.style.color = '#155724';
+                    formMessage.style.border = '1px solid #c3e6cb';
+                    formMessage.textContent = 'Thank you! Your message has been sent successfully. We\'ll get back to you within 24 hours.';
+                    form.reset();
+                } else {
+                    // Error
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to send message');
+                }
+            } catch (error) {
+                // Show error message
+                formMessage.style.display = 'block';
+                formMessage.style.backgroundColor = '#f8d7da';
+                formMessage.style.color = '#721c24';
+                formMessage.style.border = '1px solid #f5c6cb';
+                formMessage.textContent = 'Oops! Something went wrong. Please try again or email us directly at lawrence@datalux.dev';
+                console.error('Form submission error:', error);
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        });
+    </script>
+</body>
+</html>
