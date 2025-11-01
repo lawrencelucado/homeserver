@@ -16,12 +16,4 @@ services:
         source: ./data
         target: /app/data
     restart: unless-stopped
-    networks:
-      - internal_net
-      - soccer-intelligence_soccer-net
-
-networks:
-  internal_net:
-    external: true
-  soccer-intelligence_soccer-net:
-    external: true
+    # Use default network; no external network dependency
