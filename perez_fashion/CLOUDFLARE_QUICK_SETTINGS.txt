@@ -1,0 +1,89 @@
+# Cloudflare Tunnel - Quick Settings Reference
+
+## What to Enter in Your Cloudflare Form
+
+Based on your screenshot, here are the exact values to enter:
+
+┌─────────────────────────────────────────────────────────┐
+│ Published Application Route for admin.perezfashion.com │
+└─────────────────────────────────────────────────────────┘
+
+Hostname:
+  Subdomain: admin
+  Domain: perezfashion.com
+  Path: (leave empty)
+
+Service:
+  Type: HTTP
+  URL: http://localhost:8080
+
+Additional application settings: (leave default)
+
+Click "Save hostname"
+
+┌─────────────────────────────────────────────────────────┐
+│ Additional Routes You'll Need                           │
+└─────────────────────────────────────────────────────────┘
+
+Route 2 - Main Website:
+  Subdomain: (leave empty)
+  Domain: perezfashion.com
+  Service Type: HTTP
+  URL: http://localhost:8080
+
+Route 3 - WWW Subdomain:
+  Subdomain: www
+  Domain: perezfashion.com
+  Service Type: HTTP
+  URL: http://localhost:8080
+
+┌─────────────────────────────────────────────────────────┐
+│ How It Works                                            │
+└─────────────────────────────────────────────────────────┘
+
+All three routes point to the same Docker container (localhost:8080).
+
+The Next.js middleware (middleware.ts) automatically detects which
+hostname is being accessed and routes accordingly:
+
+- admin.perezfashion.com → Redirects to /admin page
+- perezfashion.com → Shows normal homepage
+- www.perezfashion.com → Shows normal homepage
+
+┌─────────────────────────────────────────────────────────┐
+│ If Using Nginx Instead                                  │
+└─────────────────────────────────────────────────────────┘
+
+Change the Service URL for all routes to:
+  Type: HTTP
+  URL: http://localhost:80
+
+(or http://localhost if port 80 is implied)
+
+┌─────────────────────────────────────────────────────────┐
+│ After Saving                                            │
+└─────────────────────────────────────────────────────────┘
+
+1. DNS records will be automatically created
+2. Wait 1-2 minutes for DNS propagation
+3. Test by visiting:
+   - https://perezfashion.com (main site)
+   - https://admin.perezfashion.com (admin dashboard)
+
+Note: Cloudflare automatically handles HTTPS/SSL certificates!
+
+┌─────────────────────────────────────────────────────────┐
+│ Troubleshooting                                         │
+└─────────────────────────────────────────────────────────┘
+
+If admin.perezfashion.com shows the homepage instead of admin:
+  → Rebuild and restart Docker:
+    docker compose down
+    docker compose up -d --build
+
+If you get "Bad Gateway" errors:
+  → Check Docker container is running:
+    docker ps
+    docker logs perez_fashion_web
+
+For more details, see CLOUDFLARE_TUNNEL_SETUP.md

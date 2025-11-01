@@ -1,0 +1,207 @@
+# agent_spec.yaml — Perez Fashion AI Website Builder
+# Drop this file in ~/perez_fashion and point your agent/runner at it.
+# Works with generic agent frameworks (Assistants, LangChain, CrewAI, custom runners).
+
+version: 1
+project:
+  name: "Perez Fashion — AI Website Builder"
+  root: "."
+  description: |
+    Automate scaffolding, branding, deployment, and SEO for perezfashion.com.
+    Stack: Next.js (App Router) + Tailwind + Docker + Nginx/Cloudflare Tunnel.
+
+metadata:
+  owner: "Mary Perez"
+  maintainer: "Lawrence Lucas"
+  repo: null
+
+variables:
+  BUSINESS_NAME: "Perez Fashion"
+  TAGLINE: "Alterations, Tailoring & Event Fashion Consulting"
+  DOMAIN: "perezfashion.com"
+  CITY: "Richmond"
+  STATE: "TX"
+  EMAIL: "contact@perezfashion.com"
+  PHONE: "+1 346-303-1855"
+  WHATSAPP: "https://wa.me/13463031855"
+  HOURS: "Tue–Sat 10am–6pm"
+  COLOR_PRIMARY: "#0B2E1A"
+  COLOR_ACCENT: "#24A666"
+  FORMSPREE_ID: "replace_me"
+
+# Files the agent is allowed to read/write.
+fs:
+  allowlist:
+    - "app/**/*.tsx"
+    - "app/**/*.ts"
+    - "public/**/*"
+    - "components/**/*"
+    - "Dockerfile"
+    - "docker-compose.yml"
+    - "nginx/**/*.conf"
+    - "app/robots.ts"
+    - "app/sitemap.ts"
+    - "tailwind.config.*"
+    - "postcss.config.*"
+    - "package.json"
+    - "project_plan.md"
+  denylist:
+    - "**/.git/**"
+    - "**/node_modules/**"
+
+placeholders:
+  # The agent should search/replace these across the codebase.
+  "{{BUSINESS_NAME}}": "${BUSINESS_NAME}"
+  "{{TAGLINE}}": "${TAGLINE}"
+  "{{DOMAIN}}": "${DOMAIN}"
+  "{{CITY}}": "${CITY}"
+  "{{STATE}}": "${STATE}"
+  "{{EMAIL}}": "${EMAIL}"
+  "{{PHONE}}": "${PHONE}"
+  "{{WHATSAPP}}": "${WHATSAPP}"
+  "{{HOURS}}": "${HOURS}"
+  "{{COLOR_PRIMARY}}": "${COLOR_PRIMARY}"
+  "{{COLOR_ACCENT}}": "${COLOR_ACCENT}"
+  "https://formspree.io/f/your-id": "https://formspree.io/f/${FORMSPREE_ID}"
+
+runtime:
+  node: "20"
+  shell: ["bash", "-lc"]
+  docker: true
+  network: internal
+
+permissions:
+  # Require explicit "approve: true" to run shell_exec steps.
+  require_approval_for:
+    - shell_exec
+    - write_files
+
+prompts:
+  system: |
+    You are TailorSite-Agent. Act as a cautious, helpful website build assistant.
+    Show diffs before writing. Offer dry-runs before executing shell commands.
+    Only modify files inside the project root. Ask if any required info is missing.
+  user_interview: |
+    Please confirm or update the following:
+    - Business name, tagline
+    - Domain, city/state
+    - Email, phone, hours, WhatsApp
+    - Formspree ID (or request creating one)
+    - Do you want /gallery and /blog now? (y/N)
+    - Use Docker + Nginx or Cloudflare Tunnel?
+
+checks:
+  - name: ports
+    verify: "lsof -i -P -n | grep :3000 || true"
+  - name: node_version
+    verify: "node -v"
+
+commands:
+  install: "npm i"
+  dev: "npm run dev"
+  build: "npm run build"
+  start: "npm run start"
+  docker_up: "docker compose up -d --build"
+  docker_logs: "docker compose logs --no-color --tail=200"
+  nginx_test: "sudo nginx -t"
+  nginx_reload: "sudo systemctl reload nginx"
+
+workflows:
+  init_local:
+    description: "Scaffold, brand, and run locally on port 3000"
+    steps:
+      - type: collect
+        prompt: user_interview
+      - type: shell_dry_run
+        name: ensure_deps
+        run: |
+          node -v && npm -v
+      - type: write_files
+        approve: true
+        files:
+          # Ensure minimal pages exist; agent may skip files that already exist.
+          - path: app/page.tsx
+            ensure: true
+          - path: app/services/page.tsx
+            ensure: true
+          - path: app/consulting/page.tsx
+            ensure: true
+          - path: app/contact/page.tsx
+            ensure: true
+          - path: app/robots.ts
+            ensure: true
+          - path: app/sitemap.ts
+            ensure: true
+      - type: replace_placeholders
+        mapping: placeholders
+      - type: shell_dry_run
+        name: dev_server
+        run: "${commands.dev}"
+
+  build_prod:
+    description: "Create production build and start (without Docker)"
+    steps:
+      - type: shell_dry_run
+        run: "${commands.build} && ${commands.start}"
+
+  deploy_docker:
+    description: "Containerize and expose on port 3000"
+    steps:
+      - type: ensure_file
+        path: Dockerfile
+      - type: ensure_file
+        path: docker-compose.yml
+      - type: shell_dry_run
+        run: "${commands.docker_up}"
+
+  nginx_proxy:
+    description: "Configure Nginx reverse proxy for perezfashion.com → 127.0.0.1:3000"
+    steps:
+      - type: ensure_file
+        path: nginx/perezfashion.conf
+      - type: shell_dry_run
+        run: "${commands.nginx_test}"
+      - type: shell_exec
+        approve: true
+        run: "${commands.nginx_reload}"
+
+  cloudflare_tunnel:
+    description: "Guide Cloudflare Tunnel hostname mapping to :3000"
+    steps:
+      - type: message
+        text: |
+          Map your tunnel to http://<LAN-IP>:3000 and set CNAME for perezfashion.com to the tunnel hostname.
+          Confirm HTTP 200 from https://perezfashion.com after DNS propagates.
+
+  seo_checks:
+    description: "Validate sitemap, robots, and JSON-LD"
+    steps:
+      - type: http_check
+        url: "https://${DOMAIN}/sitemap.xml"
+        expect_status: 200
+      - type: http_check
+        url: "https://${DOMAIN}/robots.txt"
+        expect_status: 200
+      - type: scan
+        path: app
+        expect:
+          - "LocalBusiness"
+
+  full_pipeline:
+    description: "End-to-end: init → docker → proxy → SEO"
+    steps:
+      - workflow: init_local
+      - workflow: deploy_docker
+      - workflow: nginx_proxy
+      - workflow: seo_checks
+
+outputs:
+  onboarding_message: |
+    ✅ Ready. Use `full_pipeline` to build and deploy:
+    - init_local → deploy_docker → nginx_proxy → seo_checks
+    Provide your Formspree ID to enable the contact form.
+
+notes:
+  - Ensure Cloudflare Email Routing or mailbox for ${EMAIL} is active.
+  - Replace FORMSPREE_ID or switch to a local API later.
+  - Add real photos to /public for trust and SEO.

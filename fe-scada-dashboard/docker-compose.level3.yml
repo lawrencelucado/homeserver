@@ -1,0 +1,134 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: fe-scada-db
+    environment:
+      - POSTGRES_DB=study
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - internal_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d study"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fe-scada:
+    build: .
+    container_name: fe-scada
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://appuser:${PG_PASSWORD}@db:5432/study
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - MQTT_BROKER=mqtt://mosquitto:1883
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:3000"
+    restart: unless-stopped
+    networks:
+      - internal_net
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: fe-scada-mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    restart: unless-stopped
+    networks:
+      - internal_net
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: fe-scada-nodered
+    ports:
+      - "1880:1880"
+    volumes:
+      - nodered_data:/data
+    environment:
+      - TZ=America/New_York
+    restart: unless-stopped
+    networks:
+      - internal_net
+
+  pgbackup:
+    image: prodrigestivill/postgres-backup-local:16
+    container_name: fe-scada-backup
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=study
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - SCHEDULE=@daily
+      - BACKUP_DIR=/backups
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - internal_net
+
+  # Optional: InfluxDB for SCADA historian
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: fe-scada-influx
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUX_USER:-admin}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUX_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=databin
+      - DOCKER_INFLUXDB_INIT_BUCKET=scada
+    restart: unless-stopped
+    networks:
+      - internal_net
+    profiles:
+      - historian
+
+  # Optional: Grafana for dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: fe-scada-grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+    restart: unless-stopped
+    networks:
+      - internal_net
+    profiles:
+      - historian
+
+volumes:
+  pgdata:
+  nodered_data:
+  influxdb_data:
+  grafana_data:
+
+networks:
+  internal_net:
+    external: true

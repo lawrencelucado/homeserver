@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: fe-scada-db
+    environment:
+      - POSTGRES_DB=study
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - internal_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d study"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fe-scada:
+    build: .
+    container_name: fe-scada
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://appuser:${PG_PASSWORD}@db:5432/study
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:3000"
+    restart: unless-stopped
+    networks:
+      - internal_net
+
+  pgbackup:
+    image: prodrigestivill/postgres-backup-local:16
+    container_name: fe-scada-backup
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=study
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - SCHEDULE=@daily
+      - BACKUP_DIR=/backups
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=8080
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - internal_net
+
+volumes:
+  pgdata:
+
+networks:
+  internal_net:
+    external: true

@@ -1,0 +1,158 @@
+# 🧠 Project Plan — Perez Fashion AI Website Builder
+
+## 📌 Project Overview
+Perez Fashion is a family-run **alterations, tailoring, and Nigerian wedding fashion consulting business** based in Richmond, TX.  
+The goal is to deploy a professional, modern website at **https://perezfashion.com**, hosted on the home server (`databin-server`), using **Next.js + TailwindCSS + Docker + Nginx/Cloudflare Tunnel**.
+
+This AI-driven project automates scaffolding, content population, deployment, and SEO setup for the Perez Fashion brand.
+
+---
+
+## 🎯 Mission
+Create a production-ready, visually appealing business website that:
+1. Highlights tailoring and fashion consulting services.
+2. Provides an easy way for clients to **contact, book, and consult**.
+3. Improves **local SEO visibility** (“alterations near me”, “Nigerian wedding fashion consultant”).
+4. Supports **automated updates** and future expansions (gallery, bookings, blog, CRM).
+
+---
+
+## 🧩 Core Deliverables
+| Component | Description | Output |
+|------------|-------------|---------|
+| **Website** | Next.js + Tailwind responsive layout | `/` `/services` `/consulting` `/contact` `/gallery` |
+| **Contact Form** | Formspree or local API integration | Sends to `contact@perezfashion.com` |
+| **Docker Setup** | Containerized build for homelab deployment | `docker-compose.yml` |
+| **SEO Assets** | Metadata, JSON-LD, robots, sitemap | Automatic generation |
+| **Email Integration** | Cloudflare Email Routing or Zoho Mail | Custom domain email |
+| **Automation Spec** | AI agent actions + schema | `agent_spec.yaml` (optional) |
+
+---
+
+## 🧱 Infrastructure Overview
+**Host:** `databin-server`  
+**Environment:** Ubuntu 24.04, Node.js 20.x, Docker & Nginx  
+**Network:** Internal + Cloudflare Tunnel (`perezfashion.com`)  
+**Version Control:** Git (GitHub repo optional)
+
+**Directories**
+perez_fashion/
+├── app/
+│ ├── page.tsx
+│ ├── contact/page.tsx
+│ ├── consulting/page.tsx
+│ ├── services/page.tsx
+│ └── gallery/page.tsx
+├── components/
+├── public/
+│ ├── hero.jpg
+│ ├── logo.svg
+│ └── favicon.ico
+├── docker-compose.yml
+├── Dockerfile
+├── nginx/perezfashion.conf
+└── project_plan.md
+
+markdown
+Copy code
+
+---
+
+## ⚙️ Stepwise Execution Plan
+
+### **Stage 1 — Initialization**
+- [ ] Verify domain ownership (`perezfashion.com`)
+- [ ] Clone repo into `~/perez_fashion`
+- [ ] Run `npm install` or `docker compose up -d --build`
+- [ ] Confirm local site works: `http://localhost:3000`
+
+### **Stage 2 — Branding & Content**
+- [ ] Update metadata (Business name, email, hours)
+- [ ] Insert logo and photos in `/public/`
+- [ ] Replace Formspree endpoint with real ID
+- [ ] Add business contact info and WhatsApp link
+
+### **Stage 3 — Deployment**
+- [ ] Build static assets: `npm run build`
+- [ ] Run with Docker Compose or systemd service
+- [ ] Verify Nginx or Cloudflare Tunnel routing to `https://perezfashion.com`
+
+### **Stage 4 — SEO & Analytics**
+- [ ] Validate `robots.ts` and `sitemap.ts`
+- [ ] Add LocalBusiness JSON-LD metadata
+- [ ] Register Google Business Profile
+- [ ] Add analytics script (Plausible or Google Analytics)
+
+### **Stage 5 — Marketing Integration**
+- [ ] Link Instagram & Facebook pages
+- [ ] Add call-to-action buttons on Home & Consulting pages
+- [ ] Create blog or tips section for SEO (optional)
+- [ ] Encourage customer reviews on Google & social media
+
+---
+
+## 🧠 AI Agent Objectives
+
+**Agent name:** `TailorSite-Agent`
+
+### **Capabilities**
+- Modify project files under `~/perez_fashion`
+- Generate new `.tsx` pages or components on request
+- Execute safe shell commands (install, build, docker compose)
+- Propose and apply SEO improvements
+- Draft content for services, consulting, and posts
+
+### **Guardrails**
+- Never run destructive commands without confirmation
+- Keep secrets (e.g., API keys) in `.env`
+- Log file changes before writing
+- Respect `robots.txt` and domain safety
+
+---
+
+## 🧾 Key Business Data
+| Field | Value |
+|--------|--------|
+| Business Name | Perez Fashion |
+| Owner | Mary Perez |
+| City | Richmond |
+| State | TX |
+| Email | contact@perezfashion.com |
+| Phone | +1 346-303-1855 |
+| WhatsApp | [https://wa.me/13463031855](https://wa.me/13463031855) |
+| Hours | Tue–Sat 10 AM–6 PM |
+| Domain | https://perezfashion.com |
+| Services | Alterations, Tailoring, Fashion Consulting |
+| Extra | Express jobs, Fabric sourcing, Virtual consulting |
+
+---
+
+## 🔁 Continuous Improvement Loop
+1. Monitor analytics → top visited sections.
+2. Gather client inquiries → identify common needs.
+3. Update site copy or services accordingly.
+4. Add new automation (email responders, gallery updates, blog posts).
+5. Rerun the AI agent weekly to suggest improvements.
+
+---
+
+## 🚀 Future Expansion Ideas
+- Add **gallery upload interface** for before/after showcases.
+- Integrate **booking + payment** via Stripe or Calendly.
+- Build **client CRM dashboard** to track orders.
+- Launch a **fashion insights newsletter**.
+
+---
+
+## ✅ Completion Definition
+- Live site reachable at `https://perezfashion.com`
+- Contact form delivers to `contact@perezfashion.com`
+- SEO passes Google Lighthouse checks (>90%)
+- Mobile responsive layout verified
+- Docker container healthy & restart-enabled
+- Backup and repo initialized
+
+---
+
+**Author:** AI Deployment Plan by Lawrence (Databin.dev)  
+**Last Updated:** `$(date +"%Y-%m-%d")`

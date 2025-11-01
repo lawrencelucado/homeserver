@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  fe-scada:
+    build: .
+    container_name: fe-scada-dashboard
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=file:./data/dev.db
+    ports:
+      - "127.0.0.1:3005:3000"
+    volumes:
+      - type: bind
+        source: ./data
+        target: /app/data
+    restart: unless-stopped
+    networks:
+      - internal_net
+      - soccer-intelligence_soccer-net
+
+networks:
+  internal_net:
+    external: true
+  soccer-intelligence_soccer-net:
+    external: true

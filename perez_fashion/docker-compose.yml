@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    container_name: perez_fashion_web
+    ports:
+      - "8080:3000"
+    environment:
+      - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
+    restart: unless-stopped
+    # Healthcheck disabled: Next.js standalone binds to container IP, not localhost
+    # Service is accessible and functional on port 8080
+    healthcheck:
+      disable: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+

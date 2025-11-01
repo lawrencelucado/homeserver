@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model StudyLog {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @default(now()) @unique
+  topicFE   String
+  topicSCADA String
+  questionsFE Int
+  accuracyFE Int
+  notes     String?
+}
+
+model Task {
+  id      Int    @id @default(autoincrement())
+  title   String
+  done    Boolean @default(false)
+  section String  // Learn | Apply | Reinforce
+  dayKey  String  // e.g., 2025-10-22
+}
+
+model StudySession {
+  id          Int      @id @default(autoincrement())
+  startTime   DateTime @default(now())
+  endTime     DateTime?
+  pausedAt    DateTime?
+  totalPaused Int      @default(0)  // Total paused time in seconds
+  track       String   // "FE" | "SCADA" | "Both"
+  topic       String?  // Specific topic being studied
+  status      String   @default("active")  // active | paused | completed
+  notes       String?
+  questionCount Int?   // Number of practice questions attempted
+  accuracy    Float?   // Accuracy percentage if practicing
+  breaksTaken Int      @default(0)
+  targetMinutes Int?   // Planned session length
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CoachConversation {
+  id        Int      @id @default(autoincrement())
+  role      String   // "user" | "assistant" | "system"
+  content   String
+  context   String?  // JSON: study stats, weak topics, etc.
+  createdAt DateTime @default(now())
+}
+
+model WeakTopic {
+  id          Int      @id @default(autoincrement())
+  topic       String   // e.g., "Statics - Free Body Diagrams"
+  track       String   // "FE" | "SCADA"
+  attempts    Int      @default(0)
+  correct     Int      @default(0)
+  lastPracticed DateTime?
+  priority    Int      @default(1)  // 1-5, higher = more urgent
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Flashcard {
+  id          Int      @id @default(autoincrement())
+  front       String
+  back        String
+  imageUrl    String?
+  topic       String
+  track       String   // "FE" | "SCADA"
+  box         Int      @default(1)  // Leitner box (1-5)
+  lastReview  DateTime?
+  nextReview  DateTime @default(now())
+  difficulty  Int      @default(3)  // 1-5
+  timesReviewed Int    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

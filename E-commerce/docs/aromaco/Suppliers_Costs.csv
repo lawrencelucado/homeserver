@@ -1,0 +1,28 @@
+Category,Component,Supplier,Location,URL,MOQ,Unit_Cost_USD,Sample_Cost_USD,Sample_Lead_Days,Production_Lead_Days,Trade_Terms,Certifications,Customization,Contact_Email,Notes
+Diffuser Body,"Magnetic wooden car diffuser + clip (with vial housing)",Alibaba Vendor (Shortlist 1),CN,https://www.alibaba.com/ (search: wood magnetic car diffuser),200,2.10,25,7,14-21,FOB/EXW,N/A,"Laser logo, wood stain options",,Request photos + leak test video; confirm clip material (zinc alloy vs aluminum)
+Diffuser Body,"Magnetic wooden car diffuser + clip (with vial housing)",Alibaba Vendor (Shortlist 2),CN,https://www.alibaba.com/ (search: wood car freshener refillable),150,1.95,20,7,14-21,FOB/EXW,N/A,"Logo engraving, custom box",,Ask for wood species options (ash/oak/bamboo); verify magnet strength in car heat
+Diffuser Body,"Wood cap + glass vial set (non-magnetic)",Alibaba Vendor (Shortlist 3),CN,https://www.alibaba.com/ (search: wood cap glass car diffuser),300,1.80,20,7,12-20,FOB/EXW,N/A,"Cap engraving; rope color",,Check cap torque and leak insert; inverted leak test 24h
+Diffuser Body,"Aluminum clip body + wood faceplate",Alibaba Vendor (Shortlist 4),CN,https://www.alibaba.com/ (search: aluminum car diffuser wood),200,2.40,25,7,18-25,FOB/EXW,N/A,"Anodize color, laser mark",,Confirm weight and corrosion resistance; temperature cycling test
+Diffuser Body,"Magnetic pod + refill capsule platform (premium)",Alibaba Vendor (Shortlist 5),CN,https://www.alibaba.com/ (search: magnetic car aroma pod),100,2.60,30,10,20-28,FOB/EXW,N/A,"Custom magnet geometry, packaging",,Test magnet snap force and rattle on rough roads
+
+Fragrance Base,Augeo Clean Multi,The Chemistry Store,US,https://www.chemistrystore.com/,1 gallon,24.00,0,0,2-5,FOB IF,MSDS available,N/A,sales@chemistrystore.com,Eco base for reed/diffuser; great throw; non‑toxic; primary base 70%
+Fragrance Base,Augeo Clean Multi,Bulk Apothecary,US,https://www.bulkapothecary.com/,1 gallon,26.00,0,0,2-5,FOB OH,MSDS available,N/A,customerservice@bulkapothecary.com,Backup supplier; compare shipping costs
+Fragrance Base,DPG (dipropylene glycol) industrial grade,Bulk Apothecary,US,https://www.bulkapothecary.com/,1 gallon,19.00,0,0,2-5,FOB OH,MSDS available,N/A,customerservice@bulkapothecary.com,Alternative carrier if needed (lower volatility)
+
+Fragrance Oils,"EO/FO blends (diffuser‑compatible)",New Directions Aromatics,US/CA,https://www.newdirectionsaromatics.com/,1 lb,24.00,0,0,2-5,FOB ON/OH,IFRA + SDS on request,N/A,sales@newdirectionsaromatics.com,Choose IFRA‑compliant diffuser oils only
+Fragrance Oils,"Fragrance oils (diffuser grade)",CandleScience,US,https://www.candlescience.com/,16 oz,22.00,0,0,2-4,FOB NC,IFRA + SDS on request,N/A,hello@candlescience.com,Great for testing; verify compatibility with Augeo
+Fragrance Oils,"Essential oils (single notes)",Bulk Apothecary,US,https://www.bulkapothecary.com/,16 oz,18.00,0,0,2-5,FOB OH,SDS available,N/A,customerservice@bulkapothecary.com,Blend with base; keep flash points noted
+
+Bottles,Amber glass bottle 10 ml (EURO),SKS Bottle & Packaging,US,https://www.sks-bottle.com/,144,0.30,0,0,3-7,FOB NY,N/A,"Size/finish options",service@sks-bottle.com,Order with matching reducers/caps to avoid mismatch
+Closures,Orifice reducer + tamper‑evident cap,SKS Bottle & Packaging,US,https://www.sks-bottle.com/,144,0.12,0,0,3-7,FOB NY,N/A,Color options,service@sks-bottle.com,Leak prevention; confirm reducer inner diameter for 10 ml
+Packaging,Drawer‑style kraft box (small),Packlane,US,https://www.packlane.com/,100,0.60,0,0,7-14,DDP USA,FSC options,"Emboss, foil",support@packlane.com,Upload dieline; matte finish preferred
+Labels,Matte vinyl labels (waterproof),Sticker Mule,US,https://www.stickermule.com/,50,0.12,0,0,3-5,DDP USA,N/A,"Die‑cut, matte",help@stickermule.com,Order test sheet; verify adhesion on glass
+Insert Cards,Thank‑you/safety card 4x6,VistaPrint,US,https://www.vistaprint.com/,100,0.07,0,0,3-5,DDP USA,N/A,Card stock options,support@vistaprint.com,Include QR to care/instructions
+Mailers,Kraft bubble mailer 6x9,Uline,US,https://www.uline.com/,100,0.17,0,0,2-3,DDP USA,N/A,Size/color options,customer.service@uline.com,Use right size to avoid DIM weight
+Inserts,Spare PE gasket/seal,Amazon (generic),US,https://www.amazon.com/,50,0.03,0,0,2-4,DDP USA,N/A,Diameter options,,Backup for leak prevention
+
+Wholesale/B2B,"Rigid gift box (3‑scent)",Packhelp,EU,https://packhelp.com/,100,1.80,0,0,10-21,DDP EU,FSC options,"Emboss, custom insert",support@packhelp.com,Use for B2B gift packs; check insert fit
+Branding,Wood laser engraving (caps),Local Maker (Houston),US,,10,0.40,0,0,2-5,Pickup,N/A,"Logo, depth",,Test on ash/oak; seal if needed
+
+QA & Tools,Precision scale 0.01 g,AMIR / Weigh Gram,US,https://www.amazon.com/,1,14.00,0,0,2-4,DDP USA,N/A,N/A,,Two units for redundancy
+QA & Tools,Ultrasonic cleaner 600 ml,Generic,US,https://www.amazon.com/,1,35.00,0,0,2-4,DDP USA,N/A,N/A,,For glass sanitation between batches

@@ -1,0 +1,38 @@
+# Repository Guidelines
+
+## Project Structure & Module Organization
+- Root contains `docker-compose.yml`.
+- Prompts live in `codex/prompts/` (e.g., `codex/prompts/system.md`). The container reads the active prompt from `CODEX_SYSTEM_PROMPT_FILE` (path inside the container: `/app/prompts/...`).
+- Add new prompts under `codex/prompts/*.md`; use short, descriptive names with lowercase-hyphen.
+
+## Build, Test, and Development Commands
+- Start service: `docker compose up -d`
+- View logs: `docker compose logs -f codex`
+- Restart service: `docker compose restart codex`
+- Stop and remove: `docker compose down`
+- Validate Compose file: `docker compose config`
+- Update image and redeploy: `docker pull ghcr.io/datalux-ai/codex:latest && docker compose up -d`
+
+## Coding Style & Naming Conventions
+- YAML: 2-space indent, LF line endings, no tabs.
+- Markdown: Title Case headings, concise bullets, wrap lines ~100 characters.
+- File names: lowercase-hyphen (e.g., `ops-guide.md`).
+- Environment variable names: `UPPER_SNAKE_CASE`.
+
+## Testing Guidelines
+- No unit tests; validate via Docker Compose:
+  - `docker compose config` must succeed.
+  - Bring up the stack; logs should show the service listening on port `8000`.
+  - When changing prompts, confirm the path in logs matches `CODEX_SYSTEM_PROMPT_FILE` and that the container mounts `./codex/prompts` to `/app/prompts`.
+
+## Commit & Pull Request Guidelines
+- Prefer Conventional Commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `ci:`.
+- Example: `feat(prompts): add operations prompt`.
+- PRs include: concise description, rationale, linked issues, validation steps (commands run), and relevant log excerpts or screenshots.
+- Keep changes small and focused; avoid mixing unrelated edits.
+
+## Security & Configuration Tips
+- Do not commit secrets or tokens. Use environment variables or a local `.env` ignored by Git.
+- To switch the active prompt: add a new file under `codex/prompts/` and update `CODEX_SYSTEM_PROMPT_FILE` in `docker-compose.yml` to `/app/prompts/<file>.md`.
+- If changing the port, update the published mapping (e.g., `8000:8000`) and reflect the change in documentation and clients.
+
