@@ -59,3 +59,6 @@ docker-data/
 # OS junk
 ehthumbs.db
 Icon?
+
+# Project-specific data folders
+data_lab/storage/
