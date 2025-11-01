@@ -1,0 +1,3 @@
+[submodule "soccer-intelligence"]
+	path = soccer-intelligence
+	url = git@github.com:lawrencelucado/homeserver.git
